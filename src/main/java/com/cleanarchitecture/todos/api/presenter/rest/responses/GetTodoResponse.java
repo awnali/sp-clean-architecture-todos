@@ -1,6 +1,6 @@
 package com.cleanarchitecture.todos.api.presenter.rest.responses;
 
-public class CreateTodoResponse {
+public class GetTodoResponse {
 	
 	public String id;
 	public String name;

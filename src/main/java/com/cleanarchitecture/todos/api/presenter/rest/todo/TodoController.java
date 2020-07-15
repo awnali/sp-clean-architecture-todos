@@ -7,18 +7,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cleanarchitecture.todos.api.common.ReturnApiResponse;
 import com.cleanarchitecture.todos.api.core.usecases.todo.CreateTodoUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.DeleteTodoUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.EditTodoUseCase;
+import com.cleanarchitecture.todos.api.core.usecases.todo.GetTodoByIdUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.CreateTodoUseCaseOuputValues;
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.DeleteUseCaseOutputValues;
+import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetTodoByIdUseCaseOuputValues;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.CreateTodoRequet;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.EditTodoRequest;
 import com.cleanarchitecture.todos.api.presenter.rest.responses.ApiResponse;
-import com.cleanarchitecture.todos.api.presenter.rest.responses.CreateTodoResponse;
+import com.cleanarchitecture.todos.api.presenter.rest.responses.GetTodoResponse;
 import com.cleanarchitecture.todos.api.presenter.rest.responses.TodoEditResponse;
 import com.cleanarchitecture.todos.api.presenter.rest.todo.exceptions.MyExceptionHandler;
 
@@ -37,35 +40,47 @@ public class TodoController extends MyExceptionHandler {
 	@Autowired
 	private EditTodoUseCase editTodoUseCase;
 
-	@GetMapping("/")
-	public String getAllTodos() {
-		return "working";
-	}
+	@Autowired
+	private GetTodoByIdUseCase getTodoByIdUseCase;
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse<CreateTodoResponse>> createTodo(@RequestBody CreateTodoRequet createTodoRequet) {
+	public ResponseEntity<ApiResponse<GetTodoResponse>> createTodo(@RequestBody CreateTodoRequet createTodoRequet) {
 		String userId = "awn.ale";
 		try {
 			CreateTodoUseCaseOuputValues createTodoUseCaseOuputValues = this.createTodoUseCase
 					.execute(CreateTodoInputMapper.map(createTodoRequet, userId));
-			return new SuccessResponseMapper<CreateTodoResponse, CreateTodoUseCaseOuputValues>()
-					.map(createTodoUseCaseOuputValues);
+			return new SuccessResponseMapper<GetTodoResponse>().getResponse(createTodoUseCaseOuputValues);
 		} catch (Exception ex) {
 			return ReturnApiResponse.error(ex.getMessage());
 		}
 	}
 
-	@PostMapping("/delete/{todoId}")
-	public ResponseEntity<ApiResponse<Object>> deleteTodo(@PathVariable Long todoId) {
+	@PostMapping("/delete/{id}")
+	public ResponseEntity<ApiResponse<Object>> deleteTodo(@PathVariable Long id) {
 		String userId = "awn.ale";
 		try {
 
-			DeleteUseCaseOutputValues deleteUseCaseOutputValues = this.deleteTodoUseCase
-					.execute(DeleteTodoInputMapper.map(todoId, userId));
-			return new SuccessResponseMapper<Object, DeleteUseCaseOutputValues>().map(deleteUseCaseOutputValues);
+			this.deleteTodoUseCase.execute(DeleteTodoInputMapper.map(id, userId));
+			return new SuccessResponseMapper<Object>().getResponse();
 		} catch (Exception ex) {
 			return ReturnApiResponse.error(ex.getMessage());
 		}
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<ApiResponse<GetTodoResponse>> getOneTodo(@PathVariable Long id) throws Exception {
+		try {
+			GetTodoByIdUseCaseOuputValues useCaseOuputValues = this.getTodoByIdUseCase.execute(GetTodoByIdInputMapper.map(id));
+			return new SuccessResponseMapper<GetTodoResponse>().getResponse(useCaseOuputValues);
+		} catch (Exception ex) {
+			return ReturnApiResponse.error(ex.getMessage());
+		}
+	}
+
+	@GetMapping("/")
+	public String getPaginatedTodos(@RequestParam(required = false) Integer start) {
+		System.out.println(start);
+		return "get all";
 	}
 
 	@PostMapping("/edit/{todoId}")
