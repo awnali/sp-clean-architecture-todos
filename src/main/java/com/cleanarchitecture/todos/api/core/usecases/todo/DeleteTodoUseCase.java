@@ -7,25 +7,25 @@ import org.springframework.stereotype.Service;
 
 import com.cleanarchitecture.todos.api.core.domain.Todo;
 import com.cleanarchitecture.todos.api.core.usecases.UseCase;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.DeleteUseCaseInputValues;
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.DeleteUseCaseOutputValues;
+import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetTodoByIdUseCaseInputValues;
 
 import javassist.NotFoundException;
 
 
 @Service
-public class DeleteTodoUseCase implements UseCase<DeleteUseCaseInputValues, DeleteUseCaseOutputValues>{
+public class DeleteTodoUseCase implements UseCase<GetTodoByIdUseCaseInputValues, DeleteUseCaseOutputValues>{
 
 	@Autowired
 	TodoRepository todoRepository;
 	
 	@Override
-	public DeleteUseCaseOutputValues execute(DeleteUseCaseInputValues inputValues) throws Exception {
-		Optional<Todo> todo =  todoRepository.findById(inputValues.todoId);
+	public DeleteUseCaseOutputValues execute(GetTodoByIdUseCaseInputValues inputValues) throws Exception {
+		Optional<Todo> todo =  todoRepository.findById(inputValues.getId());
 		
 		if(todo.isPresent()) {
 			try {
-				todoRepository.deleteById(inputValues.todoId);
+				todoRepository.deleteById(inputValues.getId());
 			}
 			catch(Exception ex) {
 				throw new Exception(ex.getMessage());

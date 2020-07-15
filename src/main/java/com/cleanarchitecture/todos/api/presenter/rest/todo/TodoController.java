@@ -18,6 +18,8 @@ import com.cleanarchitecture.todos.api.core.usecases.todo.DeleteTodoUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.EditTodoUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.GetAllPaginatedTodos;
 import com.cleanarchitecture.todos.api.core.usecases.todo.GetTodoByIdUseCase;
+import com.cleanarchitecture.todos.api.core.usecases.todo.MarkCompletedUseCase;
+import com.cleanarchitecture.todos.api.core.usecases.todo.MarkInProgressUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.CreateTodoUseCaseOuputValues;
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetAllPaginatedTodosUseCaseOuputValues;
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetTodoByIdUseCaseOuputValues;
@@ -49,6 +51,12 @@ public class TodoController extends MyExceptionHandler {
 	@Autowired
 	private GetAllPaginatedTodos getAllPaginatedTodos;
 
+	@Autowired
+	private MarkInProgressUseCase markInProgressUseCase;
+	
+	@Autowired
+	private MarkCompletedUseCase markCompletedUseCase;
+
 	@GetMapping("/")
 	public ResponseEntity<ApiResponse<List<GetTodoResponse>>> getPaginatedTodos(
 			@RequestParam(required = false, defaultValue = "0") Integer page) {
@@ -62,7 +70,7 @@ public class TodoController extends MyExceptionHandler {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<GetTodoResponse>> getOneTodo(@PathVariable Long id) throws Exception {
+	public ResponseEntity<ApiResponse<GetTodoResponse>> getOne(@PathVariable Long id)  {
 		try {
 			GetTodoByIdUseCaseOuputValues useCaseOuputValues = this.getTodoByIdUseCase
 					.execute(GetTodoByIdInputMapper.map(id));
@@ -73,7 +81,7 @@ public class TodoController extends MyExceptionHandler {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse<GetTodoResponse>> createTodo(@RequestBody CreateTodoRequet createTodoRequet) {
+	public ResponseEntity<ApiResponse<GetTodoResponse>> create(@RequestBody CreateTodoRequet createTodoRequet) {
 		String userId = "awn.ale";
 		try {
 			CreateTodoUseCaseOuputValues createTodoUseCaseOuputValues = this.createTodoUseCase
@@ -85,19 +93,39 @@ public class TodoController extends MyExceptionHandler {
 	}
 
 	@PostMapping("/delete/{id}")
-	public ResponseEntity<ApiResponse<Object>> deleteTodo(@PathVariable Long id) {
+	public ResponseEntity<ApiResponse<Object>> delete(@PathVariable Long id) {
 		String userId = "awn.ale";
 		try {
 
-			this.deleteTodoUseCase.execute(DeleteTodoInputMapper.map(id, userId));
+			this.deleteTodoUseCase.execute(GetTodoByIdInputMapper.map(id));
 			return new SuccessResponseMapper<Object>().getResponse();
 		} catch (Exception ex) {
 			return ReturnApiResponse.error(ex.getMessage());
 		}
 	}
 
+	@PostMapping("/in-progress/{id}")
+	public ResponseEntity<ApiResponse<GetTodoResponse>> markInProgress(@PathVariable Long id) {
+		try {
+			return new SuccessResponseMapper<GetTodoResponse>()
+					.getResponse(markInProgressUseCase.execute(GetTodoByIdInputMapper.map(id)));
+		} catch (Exception ex) {
+			return ReturnApiResponse.error(ex.getMessage());
+		}
+	}
+	
+	@PostMapping("/completed/{id}")
+	public ResponseEntity<ApiResponse<GetTodoResponse>> markComplete(@PathVariable Long id) {
+		try {
+			return new SuccessResponseMapper<GetTodoResponse>()
+					.getResponse(markCompletedUseCase.execute(GetTodoByIdInputMapper.map(id)));
+		} catch (Exception ex) {
+			return ReturnApiResponse.error(ex.getMessage());
+		}
+	}
+
 	@PostMapping("/edit/{todoId}")
-	public TodoEditResponse EditTodo(@PathVariable String todoId, @RequestBody EditTodoRequest editTodoRequest) {
+	public TodoEditResponse edit(@PathVariable String todoId, @RequestBody EditTodoRequest editTodoRequest) {
 
 		editTodoUseCase.execute(EditTodoInputMapper.map(editTodoRequest));
 		System.out
