@@ -9,7 +9,7 @@ import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetAllPaginatedTodo
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetAllPaginatedTodosUseCaseOuputValues;
 
 @Service
-public class GetAllPaginatedTodos
+public class GetAllPaginatedTodosUseCase
 		implements UseCase<GetAllPaginatedTodosUseCaseInputValues, GetAllPaginatedTodosUseCaseOuputValues> {
 
 	@Autowired
