@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.cleanarchitecture.todos.api.common.ReturnApiResponse;
 import com.cleanarchitecture.todos.api.core.usecases.UseCaseExecutor;
-import com.cleanarchitecture.todos.api.core.usecases.UseCaseInputValues;
-import com.cleanarchitecture.todos.api.core.usecases.UseCaseOutputValues;
 import com.cleanarchitecture.todos.api.core.usecases.todo.CreateTodoUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.DeleteTodoUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.EditTodoUseCase;
@@ -23,10 +19,6 @@ import com.cleanarchitecture.todos.api.core.usecases.todo.GetAllPaginatedTodosUs
 import com.cleanarchitecture.todos.api.core.usecases.todo.GetTodoByIdUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.MarkCompletedUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.MarkInProgressUseCase;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.CreateTodoUseCaseOuputValues;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetAllPaginatedTodosUseCaseInputValues;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetAllPaginatedTodosUseCaseOuputValues;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetTodoByIdUseCaseOuputValues;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.CreateTodoRequet;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.EditTodoRequest;
 import com.cleanarchitecture.todos.api.presenter.rest.responses.ApiResponse;
@@ -86,7 +78,6 @@ public class TodoController extends MyExceptionHandler {
 
 	@PostMapping("/delete/{id}")
 	public ResponseEntity<ApiResponse<Object>> delete(@PathVariable Long id) {
-		String userId = "awn.ale";
 		
 		return new UseCaseExecutor<Object>().execute(this.deleteTodoUseCase,
 				GetTodoByIdInputMapper.map(id));
