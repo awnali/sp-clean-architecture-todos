@@ -1,5 +1,7 @@
 package com.cleanarchitecture.todos.api.presenter.rest.todo;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +16,10 @@ import com.cleanarchitecture.todos.api.common.ReturnApiResponse;
 import com.cleanarchitecture.todos.api.core.usecases.todo.CreateTodoUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.DeleteTodoUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.EditTodoUseCase;
+import com.cleanarchitecture.todos.api.core.usecases.todo.GetAllPaginatedTodos;
 import com.cleanarchitecture.todos.api.core.usecases.todo.GetTodoByIdUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.CreateTodoUseCaseOuputValues;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.DeleteUseCaseOutputValues;
+import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetAllPaginatedTodosUseCaseOuputValues;
 import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetTodoByIdUseCaseOuputValues;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.CreateTodoRequet;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.EditTodoRequest;
@@ -43,6 +46,32 @@ public class TodoController extends MyExceptionHandler {
 	@Autowired
 	private GetTodoByIdUseCase getTodoByIdUseCase;
 
+	@Autowired
+	private GetAllPaginatedTodos getAllPaginatedTodos;
+
+	@GetMapping("/")
+	public ResponseEntity<ApiResponse<List<GetTodoResponse>>> getPaginatedTodos(
+			@RequestParam(required = false, defaultValue = "0") Integer page) {
+		try {
+			GetAllPaginatedTodosUseCaseOuputValues useCaseOuputValues = this.getAllPaginatedTodos
+					.execute(GetAllPaginatedTodosInputMapper.map(page));
+			return new SuccessResponseMapper<List<GetTodoResponse>>().getResponse(useCaseOuputValues);
+		} catch (Exception ex) {
+			return ReturnApiResponse.error(ex.getMessage());
+		}
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<ApiResponse<GetTodoResponse>> getOneTodo(@PathVariable Long id) throws Exception {
+		try {
+			GetTodoByIdUseCaseOuputValues useCaseOuputValues = this.getTodoByIdUseCase
+					.execute(GetTodoByIdInputMapper.map(id));
+			return new SuccessResponseMapper<GetTodoResponse>().getResponse(useCaseOuputValues);
+		} catch (Exception ex) {
+			return ReturnApiResponse.error(ex.getMessage());
+		}
+	}
+
 	@PostMapping("/create")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> createTodo(@RequestBody CreateTodoRequet createTodoRequet) {
 		String userId = "awn.ale";
@@ -65,22 +94,6 @@ public class TodoController extends MyExceptionHandler {
 		} catch (Exception ex) {
 			return ReturnApiResponse.error(ex.getMessage());
 		}
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<GetTodoResponse>> getOneTodo(@PathVariable Long id) throws Exception {
-		try {
-			GetTodoByIdUseCaseOuputValues useCaseOuputValues = this.getTodoByIdUseCase.execute(GetTodoByIdInputMapper.map(id));
-			return new SuccessResponseMapper<GetTodoResponse>().getResponse(useCaseOuputValues);
-		} catch (Exception ex) {
-			return ReturnApiResponse.error(ex.getMessage());
-		}
-	}
-
-	@GetMapping("/")
-	public String getPaginatedTodos(@RequestParam(required = false) Integer start) {
-		System.out.println(start);
-		return "get all";
 	}
 
 	@PostMapping("/edit/{todoId}")
