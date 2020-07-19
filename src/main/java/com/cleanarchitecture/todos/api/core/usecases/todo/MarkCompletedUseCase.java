@@ -6,10 +6,10 @@ import com.cleanarchitecture.todos.api.core.domain.Todo;
 import com.cleanarchitecture.todos.api.enums.TodoStatus;
 
 @Service
-public class MarkCompletedUseCase extends UpdateTodoUseCase {
+public class MarkCompletedUseCase extends UpdateTodoAttributeUseCase {
 
 	@Override
-	protected Todo changeStatus(Todo todo) {
+	protected Todo update(Todo todo) {
 		todo.setStatus(TodoStatus.COMPLETED);
 		return todo;
 	}

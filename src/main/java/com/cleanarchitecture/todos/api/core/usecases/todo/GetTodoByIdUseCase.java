@@ -5,17 +5,17 @@ import org.springframework.stereotype.Service;
 
 import com.cleanarchitecture.todos.api.core.domain.Todo;
 import com.cleanarchitecture.todos.api.core.usecases.UseCase;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetTodoByIdUseCaseInputValues;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetTodoByIdUseCaseOuputValues;
+import com.cleanarchitecture.todos.api.core.usecases.UseCaseInputValues;
+import com.cleanarchitecture.todos.api.core.usecases.UseCaseOutputValues;
 
 @Service
-public class GetTodoByIdUseCase implements UseCase<GetTodoByIdUseCaseInputValues, GetTodoByIdUseCaseOuputValues> {
+public class GetTodoByIdUseCase implements UseCase<GetTodoByIdUseCase.InputValues, GetTodoByIdUseCase.OuputValues> {
 
 	@Autowired
 	private TodoRepository todoRepository;
 
 	@Override
-	public GetTodoByIdUseCaseOuputValues execute(GetTodoByIdUseCaseInputValues inputValues) throws Exception {
+	public GetTodoByIdUseCase.OuputValues execute(InputValues inputValues) throws Exception {
 
 		Todo todo = todoRepository.findById(inputValues.getId()).orElse(null);
 
@@ -23,6 +23,33 @@ public class GetTodoByIdUseCase implements UseCase<GetTodoByIdUseCaseInputValues
 			throw new Exception("Todo not found");
 		}
 
-		return new GetTodoByIdUseCaseOuputValues(todo);
+		return new GetTodoByIdUseCase.OuputValues(todo);
+	}
+
+	public static class InputValues implements UseCaseInputValues {
+		public Long id;
+
+		public InputValues(Long id) {
+			super();
+			this.id = id;
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+	}
+
+	public class OuputValues extends UseCaseOutputValues<Todo> {
+
+		public OuputValues(Todo todo){
+			this.setOutPutObject(todo);
+		}
+
+		@Override
+		protected void setOutPutObject(Todo todo) {
+			this.outputObject = todo;
+		}
+
 	}
 }

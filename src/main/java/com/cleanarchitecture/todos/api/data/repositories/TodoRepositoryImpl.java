@@ -50,4 +50,10 @@ public class TodoRepositoryImpl implements TodoRepository {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("status"));
 		return jpaTodoRepository.findAll(pageable).stream().map(TodoData::fromThis).collect(Collectors.toList());
 	}
+
+	@Override
+	public Todo update(Todo todo) {
+		TodoData newly = TodoData.from(todo);
+		return todo;
+	}
 }

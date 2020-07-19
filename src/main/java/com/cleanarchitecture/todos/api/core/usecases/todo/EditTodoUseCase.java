@@ -1,18 +1,13 @@
 package com.cleanarchitecture.todos.api.core.usecases.todo;
 
 import org.springframework.stereotype.Service;
-
-import com.cleanarchitecture.todos.api.core.usecases.UseCase;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.EditUseCaseInputValues;
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.EditUseCaseOutputValues;
+import com.cleanarchitecture.todos.api.core.domain.Todo;
 
 @Service
-public class EditTodoUseCase implements UseCase<EditUseCaseInputValues, EditUseCaseOutputValues<?>> {
+public class EditTodoUseCase extends UpdateTodoMultipleAttributesUseCase {
 
 	@Override
-	public EditUseCaseOutputValues<?> execute(EditUseCaseInputValues inputValues) {
-		System.out.println(inputValues.todo.getName());
-		return null;
+	protected Todo update(Todo todo, InputValues input) {
+		return todo.editTodo(input.getName(), input.getStatus());
 	}
-
 }

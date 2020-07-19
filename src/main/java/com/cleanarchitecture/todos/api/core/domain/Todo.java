@@ -1,6 +1,5 @@
 package com.cleanarchitecture.todos.api.core.domain;
 
-
 import com.cleanarchitecture.todos.api.enums.TodoStatus;
 
 public class Todo {
@@ -38,11 +37,21 @@ public class Todo {
 	}
 
 	public static Todo makeTodo(String name) throws Exception {
-		
-		if(name == null || name.isEmpty()) {
+
+		if (name == null || name.isEmpty()) {
 			throw new Exception("name can't be empty");
 		}
 		return new Todo().setId(Long.MIN_VALUE).setName(name);
+	}
+
+	public Todo editTodo(String name, TodoStatus status) {
+		if (name != null) {
+			this.setName(name);
+		}
+		if (status != null) {
+			this.setStatus(status);
+		}
+		return this;
 	}
 
 }

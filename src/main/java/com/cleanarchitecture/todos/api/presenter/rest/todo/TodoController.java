@@ -23,7 +23,6 @@ import com.cleanarchitecture.todos.api.presenter.rest.requests.CreateTodoRequet;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.EditTodoRequest;
 import com.cleanarchitecture.todos.api.presenter.rest.responses.ApiResponse;
 import com.cleanarchitecture.todos.api.presenter.rest.responses.GetTodoResponse;
-import com.cleanarchitecture.todos.api.presenter.rest.responses.TodoEditResponse;
 import com.cleanarchitecture.todos.api.presenter.rest.todo.exceptions.MyExceptionHandler;
 
 @RestController
@@ -64,46 +63,41 @@ public class TodoController extends MyExceptionHandler {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> getOne(@PathVariable Long id) {
-		return new UseCaseExecutor<GetTodoResponse>().execute(this.getTodoByIdUseCase,
-				GetTodoByIdInputMapper.map(id));
+		return new UseCaseExecutor<GetTodoResponse>().execute(this.getTodoByIdUseCase, GetTodoByIdInputMapper.map(id));
 	}
 
 	@PostMapping("/create")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> create(@RequestBody CreateTodoRequet createTodoRequet) {
 		String userId = "awn.ale";
-		
+
 		return new UseCaseExecutor<GetTodoResponse>().execute(this.createTodoUseCase,
 				CreateTodoInputMapper.map(createTodoRequet, userId));
 	}
 
 	@PostMapping("/delete/{id}")
 	public ResponseEntity<ApiResponse<Object>> delete(@PathVariable Long id) {
-		
-		return new UseCaseExecutor<Object>().execute(this.deleteTodoUseCase,
-				GetTodoByIdInputMapper.map(id));
+
+		return new UseCaseExecutor<Object>().execute(this.deleteTodoUseCase, GetTodoByIdInputMapper.map(id));
 	}
 
 	@PostMapping("/in-progress/{id}")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> markInProgress(@PathVariable Long id) {
-		
+
 		return new UseCaseExecutor<GetTodoResponse>().execute(this.markInProgressUseCase,
 				GetTodoByIdInputMapper.map(id));
 	}
 
 	@PostMapping("/completed/{id}")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> markComplete(@PathVariable Long id) {
-		
+
 		return new UseCaseExecutor<GetTodoResponse>().execute(this.markCompletedUseCase,
 				GetTodoByIdInputMapper.map(id));
 	}
 
-	@PostMapping("/edit/{todoId}")
-	public TodoEditResponse edit(@PathVariable String todoId, @RequestBody EditTodoRequest editTodoRequest) {
-
-		editTodoUseCase.execute(EditTodoInputMapper.map(editTodoRequest));
-		System.out
-				.println(todoId + ", name: " + editTodoRequest.getName() + ", status: " + editTodoRequest.getStatus());
-
-		return null;
+	@PostMapping("/edit/{id}")
+	public ResponseEntity<ApiResponse<GetTodoResponse>> edit(@PathVariable Long id,
+			@RequestBody EditTodoRequest editTodoRequest) {
+		return new UseCaseExecutor<GetTodoResponse>().execute(this.editTodoUseCase,
+				EditTodoInputMapper.map(editTodoRequest, id));
 	}
 }

@@ -1,9 +1,9 @@
 package com.cleanarchitecture.todos.api.presenter.rest.todo;
 
-import com.cleanarchitecture.todos.api.core.usecases.todo.io.GetTodoByIdUseCaseInputValues;
+import com.cleanarchitecture.todos.api.core.usecases.todo.GetTodoByIdUseCase;
 
 public class GetTodoByIdInputMapper {
-	public static GetTodoByIdUseCaseInputValues map(Long id) {
-		return new GetTodoByIdUseCaseInputValues(id);
+	public static GetTodoByIdUseCase.InputValues map(Long id) {
+		return new GetTodoByIdUseCase.InputValues(id);
 	}
 }

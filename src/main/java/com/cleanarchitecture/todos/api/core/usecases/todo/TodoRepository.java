@@ -15,4 +15,6 @@ public interface TodoRepository {
 	Todo persist(Todo todo);
 
 	void deleteById(Long todoId);
+	
+	Todo update(Todo todo);
 }
