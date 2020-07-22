@@ -1,6 +1,6 @@
 package com.cleanarchitecture.todos.api.presenter.rest.requests;
 
-import com.cleanarchitecture.todos.api.enums.TodoStatus;
+import com.cleanarchitecture.todos.api.core.domain.enums.TodoStatus;
 
 public class EditTodoRequest {
 

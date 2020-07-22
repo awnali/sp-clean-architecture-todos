@@ -7,10 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-
 import com.cleanarchitecture.todos.api.common.MapModel;
 import com.cleanarchitecture.todos.api.core.domain.Todo;
-import com.cleanarchitecture.todos.api.enums.TodoStatus;
+import com.cleanarchitecture.todos.api.core.domain.enums.TodoStatus;
 
 
 

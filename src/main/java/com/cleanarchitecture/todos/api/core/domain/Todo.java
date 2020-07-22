@@ -1,6 +1,6 @@
 package com.cleanarchitecture.todos.api.core.domain;
 
-import com.cleanarchitecture.todos.api.enums.TodoStatus;
+import com.cleanarchitecture.todos.api.core.domain.enums.TodoStatus;
 
 public class Todo {
 

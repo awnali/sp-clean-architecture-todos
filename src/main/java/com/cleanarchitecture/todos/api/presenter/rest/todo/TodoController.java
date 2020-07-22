@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,11 +22,11 @@ import com.cleanarchitecture.todos.api.core.usecases.todo.GetAllPaginatedTodosUs
 import com.cleanarchitecture.todos.api.core.usecases.todo.GetTodoByIdUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.MarkCompletedUseCase;
 import com.cleanarchitecture.todos.api.core.usecases.todo.MarkInProgressUseCase;
+import com.cleanarchitecture.todos.api.presenter.exceptions.MyExceptionHandler;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.CreateTodoRequet;
 import com.cleanarchitecture.todos.api.presenter.rest.requests.EditTodoRequest;
 import com.cleanarchitecture.todos.api.presenter.rest.responses.ApiResponse;
 import com.cleanarchitecture.todos.api.presenter.rest.responses.GetTodoResponse;
-import com.cleanarchitecture.todos.api.presenter.rest.todo.exceptions.MyExceptionHandler;
 
 @RestController
 @RequestMapping("/todos")
@@ -66,7 +69,7 @@ public class TodoController extends MyExceptionHandler {
 		return new UseCaseExecutor<GetTodoResponse>().execute(this.getTodoByIdUseCase, GetTodoByIdInputMapper.map(id));
 	}
 
-	@PostMapping("/create")
+	@PostMapping("/")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> create(@RequestBody CreateTodoRequet createTodoRequet) {
 		String userId = "awn.ale";
 
@@ -74,27 +77,27 @@ public class TodoController extends MyExceptionHandler {
 				CreateTodoInputMapper.map(createTodoRequet, userId));
 	}
 
-	@PostMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse<Object>> delete(@PathVariable Long id) {
 
 		return new UseCaseExecutor<Object>().execute(this.deleteTodoUseCase, GetTodoByIdInputMapper.map(id));
 	}
 
-	@PostMapping("/in-progress/{id}")
+	@PatchMapping("/{id}/in-progress")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> markInProgress(@PathVariable Long id) {
 
 		return new UseCaseExecutor<GetTodoResponse>().execute(this.markInProgressUseCase,
 				GetTodoByIdInputMapper.map(id));
 	}
 
-	@PostMapping("/completed/{id}")
+	@PatchMapping("/{id}/completed")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> markComplete(@PathVariable Long id) {
 
 		return new UseCaseExecutor<GetTodoResponse>().execute(this.markCompletedUseCase,
 				GetTodoByIdInputMapper.map(id));
 	}
 
-	@PostMapping("/edit/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse<GetTodoResponse>> edit(@PathVariable Long id,
 			@RequestBody EditTodoRequest editTodoRequest) {
 		return new UseCaseExecutor<GetTodoResponse>().execute(this.editTodoUseCase,

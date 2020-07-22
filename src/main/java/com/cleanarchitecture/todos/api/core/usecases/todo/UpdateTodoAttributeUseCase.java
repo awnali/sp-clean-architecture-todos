@@ -1,7 +1,6 @@
 package com.cleanarchitecture.todos.api.core.usecases.todo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.cleanarchitecture.todos.api.core.domain.NotFoundException;
 import com.cleanarchitecture.todos.api.core.domain.Todo;
 import com.cleanarchitecture.todos.api.core.usecases.UseCase;

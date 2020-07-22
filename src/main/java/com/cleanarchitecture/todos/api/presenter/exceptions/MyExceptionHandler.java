@@ -1,4 +1,4 @@
-package com.cleanarchitecture.todos.api.presenter.rest.todo.exceptions;
+package com.cleanarchitecture.todos.api.presenter.exceptions;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

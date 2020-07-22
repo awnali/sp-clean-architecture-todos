@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.cleanarchitecture.todos.api.core.domain.Todo;
 import com.cleanarchitecture.todos.api.core.usecases.UseCase;
 import com.cleanarchitecture.todos.api.core.usecases.UseCaseOutputValues;
-
 import javassist.NotFoundException;
 
 @Service

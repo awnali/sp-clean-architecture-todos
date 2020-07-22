@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cleanarchitecture.todos.api.core.domain.NotFoundException;
 import com.cleanarchitecture.todos.api.core.domain.Todo;
+import com.cleanarchitecture.todos.api.core.domain.enums.TodoStatus;
 import com.cleanarchitecture.todos.api.core.usecases.UseCase;
 import com.cleanarchitecture.todos.api.core.usecases.UseCaseInputValues;
 import com.cleanarchitecture.todos.api.core.usecases.UseCaseOutputValues;
-import com.cleanarchitecture.todos.api.enums.TodoStatus;
 
 public abstract class UpdateTodoMultipleAttributesUseCase implements
 		UseCase<UpdateTodoMultipleAttributesUseCase.InputValues, UpdateTodoMultipleAttributesUseCase.OutputValues> {
